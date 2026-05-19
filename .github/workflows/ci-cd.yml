@@ -250,11 +250,3 @@ jobs:
           git commit -m "chore(eval): update baseline after prod deploy ${{ github.sha }}"
           git push
 
-      - name: Notify Slack
-        if: always()
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' \
-            --data "{\"text\":\"Deployed banking-rag ${{ github.sha }} to production EC2 (${{ secrets.EC2_HOST }})\"}" \
-            "$SLACK_WEBHOOK_URL"
