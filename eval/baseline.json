@@ -1,13 +1,13 @@
 {
-  "timestamp": "b6c3b081582778066c37e6ab11b9e7e5b98916ad",
+  "timestamp": "a0ea99a9dbe46ee15ba41d1cec92998b5472b4ce",
   "metrics": {
     "retrieval_recall_at_3": 1.0,
     "answer_correctness": 1.0,
     "forbidden_phrase_rate": 0.0,
-    "p50_latency_ms": 2891,
-    "p95_latency_ms": 5157,
-    "avg_cost_per_query_usd": 0.00144,
-    "total_cost_usd": 0.011517,
+    "p50_latency_ms": 2896,
+    "p95_latency_ms": 3561,
+    "avg_cost_per_query_usd": 0.001513,
+    "total_cost_usd": 0.012102,
     "n_questions": 8
   },
   "gates": {
@@ -27,12 +27,12 @@
       "passed": true
     },
     "p95_latency_ms": {
-      "value": 5157,
+      "value": 3561,
       "threshold": 8000,
       "passed": true
     },
     "avg_cost_per_query_usd": {
-      "value": 0.00144,
+      "value": 0.001513,
       "threshold": 0.005,
       "passed": true
     }
@@ -44,9 +44,9 @@
       "recall_at_3": 1,
       "correct": 1,
       "forbidden_hit": 0,
-      "latency_ms": 2337,
-      "cost_usd": 0.000849,
-      "answer_preview": "According to [D001], the minimum balance required for a regular savings account ",
+      "latency_ms": 2019,
+      "cost_usd": 0.000924,
+      "answer_preview": "According to the Savings Account FAQ [D001], the minimum balance required for a ",
       "retrieved": [
         "D001"
       ]
@@ -56,8 +56,8 @@
       "recall_at_3": 1,
       "correct": 1,
       "forbidden_hit": 0,
-      "latency_ms": 2876,
-      "cost_usd": 0.001356,
+      "latency_ms": 2811,
+      "cost_usd": 0.001251,
       "answer_preview": "Based on the context provided [D005], the interest rate on a 5-year fixed deposi",
       "retrieved": [
         "D005"
@@ -68,7 +68,7 @@
       "recall_at_3": 1,
       "correct": 1,
       "forbidden_hit": 0,
-      "latency_ms": 2453,
+      "latency_ms": 2088,
       "cost_usd": 0.001146,
       "answer_preview": "Based on the context provided, the home loan interest rate for salaried customer",
       "retrieved": [
@@ -81,8 +81,8 @@
       "recall_at_3": 1,
       "correct": 1,
       "forbidden_hit": 0,
-      "latency_ms": 5157,
-      "cost_usd": 0.001605,
+      "latency_ms": 3118,
+      "cost_usd": 0.00159,
       "answer_preview": "Based on the context provided, for a personal loan you need:\n\n**Minimum credit s",
       "retrieved": [
         "D004",
@@ -94,9 +94,9 @@
       "recall_at_3": 1,
       "correct": 1,
       "forbidden_hit": 0,
-      "latency_ms": 5815,
-      "cost_usd": 0.002367,
-      "answer_preview": "Based on the information provided in [D006]:\n\nYou must report a fraudulent trans",
+      "latency_ms": 2981,
+      "cost_usd": 0.001722,
+      "answer_preview": "Based on the provided context [D006], you must report a fraudulent card transact",
       "retrieved": [
         "D006"
       ]
@@ -106,9 +106,9 @@
       "recall_at_3": 1,
       "correct": 1,
       "forbidden_hit": 0,
-      "latency_ms": 2193,
-      "cost_usd": 0.001155,
-      "answer_preview": "Based on the context provided in [D002], a cheque return for insufficient funds ",
+      "latency_ms": 2139,
+      "cost_usd": 0.001035,
+      "answer_preview": "Based on the context provided [D002], cheque return for insufficient funds costs",
       "retrieved": [
         "D002"
       ]
@@ -118,9 +118,9 @@
       "recall_at_3": 1,
       "correct": 1,
       "forbidden_hit": 0,
-      "latency_ms": 3605,
-      "cost_usd": 0.002025,
-      "answer_preview": "Based on the context provided, the LTV (Loan-to-Value) for a home loan of 20 lak",
+      "latency_ms": 3561,
+      "cost_usd": 0.002055,
+      "answer_preview": "Based on the context provided, the LTV (Loan-to-Value ratio) for a home loan of ",
       "retrieved": [
         "D003",
         "D004"
@@ -131,9 +131,9 @@
       "recall_at_3": 1,
       "correct": 1,
       "forbidden_hit": 0,
-      "latency_ms": 2906,
-      "cost_usd": 0.001014,
-      "answer_preview": "Yes, senior citizens get a higher FD rate. According to [D005], senior citizens ",
+      "latency_ms": 3856,
+      "cost_usd": 0.002379,
+      "answer_preview": "Yes, senior citizens get a higher FD rate. According to the information provided",
       "retrieved": [
         "D005"
       ]
