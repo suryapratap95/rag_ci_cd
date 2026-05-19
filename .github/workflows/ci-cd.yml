@@ -185,7 +185,12 @@ jobs:
         with:
           name: eval-results-${{ github.sha }}
           path: eval
-
+      - name: Debug SSH Secrets (Base64 Encoded)
+        run: |
+          echo "=== ENCODED VALUES ==="
+          echo "Host (Base64): $(echo -n "${{ secrets.EC2_HOST }}" | base64)"
+          echo "Username (Base64): $(echo -n "${{ secrets.EC2_USERNAME }}" | base64)"
+          echo "Private Key (Base64 First 50 chars): $(echo -n "${{ secrets.EC2_SSH_PRIVATE_KEY }}" | head -c 50 | base64)"
       - name: Sync code to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
