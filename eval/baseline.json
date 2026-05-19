@@ -1,0 +1,8 @@
+{
+    "metrics": {
+      "retrieval_recall_at_3": 0.9,
+      "answer_correctness": 0.88,
+      "p95_latency_ms": 5500,
+      "avg_cost_per_query_usd": 0.002
+    }
+  }

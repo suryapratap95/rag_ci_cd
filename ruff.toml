@@ -1,0 +1,19 @@
+# Ruff configuration — keep CI fast, fail on real issues
+line-length = 110
+target-version = "py311"
+
+[lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes (undefined names, unused imports)
+    "W",   # pycodestyle warnings
+    "I",   # isort (import order)
+    "B",   # bugbear (likely bugs)
+    "UP",  # pyupgrade (use modern syntax)
+]
+ignore = [
+    "E501",  # line too long (formatter handles this)
+]
+
+[lint.per-file-ignores]
+"tests/*" = ["F401"]   # tests sometimes import for side-effects
