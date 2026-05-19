@@ -129,7 +129,13 @@ jobs:
           target: ${{ secrets.EC2_DEPLOY_PATH }}
           strip_components: 0
           overwrite: true
-
+      
+      - name: Debug SSH Secrets (Base64 Encoded)
+        run: |
+          echo "=== ENCODED VALUES ==="
+          echo "Host (Base64): $(echo -n "${{ secrets.EC2_HOST }}" | base64)"
+          echo "Username (Base64): $(echo -n "${{ secrets.EC2_USERNAME }}" | base64)"
+          echo "Private Key (Base64 First 50 chars): $(echo -n "${{ secrets.EC2_SSH_PRIVATE_KEY }}" | head -c 50 | base64)"
       - name: Run deploy on EC2
         uses: appleboy/ssh-action@v1.2.0
         env:
