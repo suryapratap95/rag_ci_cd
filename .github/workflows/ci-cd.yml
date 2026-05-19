@@ -105,8 +105,9 @@ jobs:
   # ──────────────────────────────────────────────────────────────
   # 4. DEPLOY TO STAGING (EC2 via SSH)
   # Required secrets (repo or staging environment):
-  #   EC2_HOST, EC2_USERNAME, EC2_SSH_PRIVATE_KEY
-  # Optional: EC2_SSH_PORT, EC2_DEPLOY_PATH (default /home/<user>/rag_ci_cd)
+  #   EC2_HOST, EC2_USERNAME, EC2_SSH_PRIVATE_KEY, EC2_DEPLOY_PATH
+  # EC2_DEPLOY_PATH = existing project root on EC2 (e.g. /home/ubuntu/rag_ci_cd)
+  # Optional: EC2_SSH_PORT
   # ──────────────────────────────────────────────────────────────
   deploy_staging:
     name: 🚀 Deploy to staging (EC2)
@@ -115,15 +116,18 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: staging
+    env:
+      EC2_DEPLOY_PATH: ${{ secrets.EC2_DEPLOY_PATH }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Debug SSH Secrets (Base64 Encoded)
+      - name: Verify EC2_DEPLOY_PATH secret
         run: |
-          echo "=== ENCODED VALUES ==="
-          echo "Host (Base64): $(echo -n "${{ secrets.EC2_HOST }}" | base64)"
-          echo "Username (Base64): $(echo -n "${{ secrets.EC2_USERNAME }}" | base64)"
-          echo "Private Key (Base64 First 50 chars): $(echo -n "${{ secrets.EC2_SSH_PRIVATE_KEY }}" | head -c 50 | base64)"
+          if [[ -z "$EC2_DEPLOY_PATH" ]]; then
+            echo "Set EC2_DEPLOY_PATH to your existing app folder on EC2 (project root)."
+            exit 1
+          fi
+          echo "Deploy target: $EC2_DEPLOY_PATH"
 
       - name: Sync code to EC2
         uses: appleboy/scp-action@v0.1.7
@@ -133,15 +137,14 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           port: ${{ secrets.EC2_SSH_PORT || env.EC2_SSH_PORT }}
           source: "src,eval,tests,scripts,requirements.txt,ruff.toml"
-          target: ${{ secrets.EC2_DEPLOY_PATH }}
+          target: ${{ env.EC2_DEPLOY_PATH }}/
           strip_components: 0
           overwrite: true
-      
 
       - name: Run deploy on EC2
         uses: appleboy/ssh-action@v1.2.0
         env:
-          EC2_DEPLOY_PATH: ${{ secrets.EC2_DEPLOY_PATH }}
+          EC2_DEPLOY_PATH: ${{ env.EC2_DEPLOY_PATH }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -151,10 +154,11 @@ jobs:
           envs: EC2_DEPLOY_PATH,ANTHROPIC_API_KEY
           script: |
             set -e
-            if [[ -z "$EC2_DEPLOY_PATH" ]]; then
-              EC2_DEPLOY_PATH="$HOME/rag_ci_cd"
-            fi
-            mkdir -p "$EC2_DEPLOY_PATH/scripts"
+            test -d "$EC2_DEPLOY_PATH" || { echo "Missing folder: $EC2_DEPLOY_PATH"; exit 1; }
+            test -f "$EC2_DEPLOY_PATH/scripts/deploy-ec2.sh" || {
+              echo "deploy-ec2.sh not found under $EC2_DEPLOY_PATH/scripts — check SCP target"
+              exit 1
+            }
             chmod +x "$EC2_DEPLOY_PATH/scripts/deploy-ec2.sh"
             bash "$EC2_DEPLOY_PATH/scripts/deploy-ec2.sh"
 
@@ -166,11 +170,11 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           port: ${{ secrets.EC2_SSH_PORT || env.EC2_SSH_PORT }}
           script: |
-            DEPLOY="${{ secrets.EC2_DEPLOY_PATH }}"
-            [[ -z "$DEPLOY" ]] && DEPLOY="$HOME/rag_ci_cd"
+            DEPLOY="${{ env.EC2_DEPLOY_PATH }}"
             test -f "$DEPLOY/src/agent.py"
             test -f "$DEPLOY/requirements.txt"
-            echo "Staging deploy OK — app files present on EC2"
+            test -x "$DEPLOY/scripts/deploy-ec2.sh"
+            echo "Staging deploy OK — synced code present at $DEPLOY"
 
   # ──────────────────────────────────────────────────────────────
   # 5. DEPLOY TO PRODUCTION (EC2 via SSH, manual approval)
@@ -183,6 +187,8 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
+    env:
+      EC2_DEPLOY_PATH: ${{ secrets.EC2_DEPLOY_PATH }}
     permissions:
       contents: write
     steps:
@@ -193,12 +199,15 @@ jobs:
         with:
           name: eval-results-${{ github.sha }}
           path: eval
-      - name: Debug SSH Secrets (Base64 Encoded)
+
+      - name: Verify EC2_DEPLOY_PATH secret
         run: |
-          echo "=== ENCODED VALUES ==="
-          echo "Host (Base64): $(echo -n "${{ secrets.EC2_HOST }}" | base64)"
-          echo "Username (Base64): $(echo -n "${{ secrets.EC2_USERNAME }}" | base64)"
-          echo "Private Key (Base64 First 50 chars): $(echo -n "${{ secrets.EC2_SSH_PRIVATE_KEY }}" | head -c 50 | base64)"
+          if [[ -z "$EC2_DEPLOY_PATH" ]]; then
+            echo "Set EC2_DEPLOY_PATH to your existing app folder on EC2 (project root)."
+            exit 1
+          fi
+          echo "Deploy target: $EC2_DEPLOY_PATH"
+
       - name: Sync code to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -207,14 +216,14 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           port: ${{ secrets.EC2_SSH_PORT || env.EC2_SSH_PORT }}
           source: "src,eval,tests,scripts,requirements.txt,ruff.toml"
-          target: ${{ secrets.EC2_DEPLOY_PATH }}
+          target: ${{ env.EC2_DEPLOY_PATH }}/
           strip_components: 0
           overwrite: true
 
       - name: Run deploy on EC2
         uses: appleboy/ssh-action@v1.2.0
         env:
-          EC2_DEPLOY_PATH: ${{ secrets.EC2_DEPLOY_PATH }}
+          EC2_DEPLOY_PATH: ${{ env.EC2_DEPLOY_PATH }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -224,10 +233,11 @@ jobs:
           envs: EC2_DEPLOY_PATH,ANTHROPIC_API_KEY
           script: |
             set -e
-            if [[ -z "$EC2_DEPLOY_PATH" ]]; then
-              EC2_DEPLOY_PATH="$HOME/rag_ci_cd"
-            fi
-            mkdir -p "$EC2_DEPLOY_PATH/scripts"
+            test -d "$EC2_DEPLOY_PATH" || { echo "Missing folder: $EC2_DEPLOY_PATH"; exit 1; }
+            test -f "$EC2_DEPLOY_PATH/scripts/deploy-ec2.sh" || {
+              echo "deploy-ec2.sh not found under $EC2_DEPLOY_PATH/scripts — check SCP target"
+              exit 1
+            }
             chmod +x "$EC2_DEPLOY_PATH/scripts/deploy-ec2.sh"
             bash "$EC2_DEPLOY_PATH/scripts/deploy-ec2.sh"
 
