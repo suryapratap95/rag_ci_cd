@@ -1,8 +1,142 @@
 {
-    "metrics": {
-      "retrieval_recall_at_3": 0.9,
-      "answer_correctness": 0.88,
-      "p95_latency_ms": 5500,
-      "avg_cost_per_query_usd": 0.002
+  "timestamp": "b6c3b081582778066c37e6ab11b9e7e5b98916ad",
+  "metrics": {
+    "retrieval_recall_at_3": 1.0,
+    "answer_correctness": 1.0,
+    "forbidden_phrase_rate": 0.0,
+    "p50_latency_ms": 2891,
+    "p95_latency_ms": 5157,
+    "avg_cost_per_query_usd": 0.00144,
+    "total_cost_usd": 0.011517,
+    "n_questions": 8
+  },
+  "gates": {
+    "retrieval_recall_at_3": {
+      "value": 1.0,
+      "threshold": 0.85,
+      "passed": true
+    },
+    "answer_correctness": {
+      "value": 1.0,
+      "threshold": 0.8,
+      "passed": true
+    },
+    "forbidden_phrase_rate": {
+      "value": 0.0,
+      "threshold": 0.0,
+      "passed": true
+    },
+    "p95_latency_ms": {
+      "value": 5157,
+      "threshold": 8000,
+      "passed": true
+    },
+    "avg_cost_per_query_usd": {
+      "value": 0.00144,
+      "threshold": 0.005,
+      "passed": true
     }
-  }
+  },
+  "all_passed": true,
+  "per_question": [
+    {
+      "id": "q1",
+      "recall_at_3": 1,
+      "correct": 1,
+      "forbidden_hit": 0,
+      "latency_ms": 2337,
+      "cost_usd": 0.000849,
+      "answer_preview": "According to [D001], the minimum balance required for a regular savings account ",
+      "retrieved": [
+        "D001"
+      ]
+    },
+    {
+      "id": "q2",
+      "recall_at_3": 1,
+      "correct": 1,
+      "forbidden_hit": 0,
+      "latency_ms": 2876,
+      "cost_usd": 0.001356,
+      "answer_preview": "Based on the context provided [D005], the interest rate on a 5-year fixed deposi",
+      "retrieved": [
+        "D005"
+      ]
+    },
+    {
+      "id": "q3",
+      "recall_at_3": 1,
+      "correct": 1,
+      "forbidden_hit": 0,
+      "latency_ms": 2453,
+      "cost_usd": 0.001146,
+      "answer_preview": "Based on the context provided, the home loan interest rate for salaried customer",
+      "retrieved": [
+        "D003",
+        "D004"
+      ]
+    },
+    {
+      "id": "q4",
+      "recall_at_3": 1,
+      "correct": 1,
+      "forbidden_hit": 0,
+      "latency_ms": 5157,
+      "cost_usd": 0.001605,
+      "answer_preview": "Based on the context provided, for a personal loan you need:\n\n**Minimum credit s",
+      "retrieved": [
+        "D004",
+        "D003"
+      ]
+    },
+    {
+      "id": "q5",
+      "recall_at_3": 1,
+      "correct": 1,
+      "forbidden_hit": 0,
+      "latency_ms": 5815,
+      "cost_usd": 0.002367,
+      "answer_preview": "Based on the information provided in [D006]:\n\nYou must report a fraudulent trans",
+      "retrieved": [
+        "D006"
+      ]
+    },
+    {
+      "id": "q6",
+      "recall_at_3": 1,
+      "correct": 1,
+      "forbidden_hit": 0,
+      "latency_ms": 2193,
+      "cost_usd": 0.001155,
+      "answer_preview": "Based on the context provided in [D002], a cheque return for insufficient funds ",
+      "retrieved": [
+        "D002"
+      ]
+    },
+    {
+      "id": "q7",
+      "recall_at_3": 1,
+      "correct": 1,
+      "forbidden_hit": 0,
+      "latency_ms": 3605,
+      "cost_usd": 0.002025,
+      "answer_preview": "Based on the context provided, the LTV (Loan-to-Value) for a home loan of 20 lak",
+      "retrieved": [
+        "D003",
+        "D004"
+      ]
+    },
+    {
+      "id": "q8",
+      "recall_at_3": 1,
+      "correct": 1,
+      "forbidden_hit": 0,
+      "latency_ms": 2906,
+      "cost_usd": 0.001014,
+      "answer_preview": "Yes, senior citizens get a higher FD rate. According to [D005], senior citizens ",
+      "retrieved": [
+        "D005"
+      ]
+    }
+  ]
+}
