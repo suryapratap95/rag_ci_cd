@@ -1,10 +1,13 @@
 """RAG agent — retrieves context and calls the LLM."""
-import os
 import time
+from pathlib import Path
 
 from anthropic import Anthropic
+from dotenv import load_dotenv
 
 from .retriever import retrieve
+
+load_dotenv(Path(__file__).parent / ".env")
 
 _client = Anthropic()
 MODEL = "claude-sonnet-4-5"
